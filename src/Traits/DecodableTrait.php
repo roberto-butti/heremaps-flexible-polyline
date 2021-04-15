@@ -12,12 +12,12 @@ use Exception;
 
 trait DecodableTrait
 {
-   
+
     public static function decode(string $encoded): array
     {
         $decoded = self::decodeUnsignedValues($encoded);
         $header = self::decodeHeader($decoded[0], $decoded[1]);
-        
+
         $factorDegree = 10 ** $header['precision'];
         $factorZ = 10 ** $header['thirdDimPrecision'];
         $thirdDim = $header['thirdDim'];
@@ -26,14 +26,14 @@ trait DecodableTrait
         $lastLng = 0;
         $lastZ = 0;
         $res = [];
-    
+
         $i = 2;
         for (; $i < count($decoded);) {
             $deltaLat = self::toSigned($decoded[$i]) / $factorDegree;
             $deltaLng = self::toSigned($decoded[$i + 1]) / $factorDegree;
             $lastLat += $deltaLat;
             $lastLng += $deltaLng;
-    
+
             if ($thirdDim) {
                 $deltaZ = self::toSigned($decoded[$i + 2]) / $factorZ;
                 $lastZ += $deltaZ;
@@ -44,11 +44,11 @@ trait DecodableTrait
                 $i += 2;
             }
         }
-    
+
         if ($i !== count($decoded)) {
             throw new Exception('Invalid encoding. Premature ending reached');
         }
-    
+
         return [
             'precision' => $header['precision'],
             'thirdDim' => $header['thirdDim'],
@@ -86,7 +86,7 @@ trait DecodableTrait
         $resList = [];
 
         $characters = str_split($encoded);
-        
+
         foreach ($characters as $char) {
             $value = self::decodeChar($char);
             $result |= ($value & 0x1F) << $shift;
@@ -99,11 +99,11 @@ trait DecodableTrait
                 $shift += 5;
             }
         }
-    
+
         if ($shift > 0) {
             throw new Exception('Invalid encoding');
         }
-        
+
         return $resList;
     }
 

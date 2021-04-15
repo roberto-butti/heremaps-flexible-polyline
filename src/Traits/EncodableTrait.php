@@ -12,7 +12,7 @@ use Exception;
 
 trait EncodableTrait
 {
-    
+
     public static function encode(
         array $coordinates,
         int $precision = null,
@@ -27,7 +27,7 @@ trait EncodableTrait
         $multiplierZ = 10 ** $thirdDimPrecision;
         $encodedHeaderList = self::encodeHeader($precision, $thirdDim, $thirdDimPrecision);
         $encodedCoords = [];
-    
+
         $lastLat = 0;
         $lastLng = 0;
         $lastZ = 0;
@@ -36,11 +36,11 @@ trait EncodableTrait
             $lat = (int)round($location[0] * $multiplierDegree);
             $encodedCoords[] = self::encodeScaledValue($lat - $lastLat);
             $lastLat = $lat;
-    
+
             $lng = (int)round($location[1] * $multiplierDegree);
             $encodedCoords[] = self::encodeScaledValue($lng - $lastLng);
             $lastLng = $lng;
-    
+
             if ($thirdDim) {
                 $z = (int)round($location[2] * $multiplierZ);
                 $encodedCoords[] = self::encodeScaledValue($z - $lastZ);
@@ -62,11 +62,11 @@ trait EncodableTrait
         if ($thirdDim < 0 || $thirdDim > 7 || $thirdDim === 4 || $thirdDim === 5) {
             throw new Exception('thirdDim should be between 0, 1, 2, 3, 6 or 7');
         }
-    
+
         $res = ($thirdDimPrecision << 7) | ($thirdDim << 4) | $precision;
         return self::encodeUnsignedNumber(self::FORMAT_VERSION) . self::encodeUnsignedNumber($res);
     }
-    
+
     public static function encodeUnsignedNumber(float $val): string
     {
         $res = '';
@@ -88,7 +88,7 @@ trait EncodableTrait
         if ($negative) {
             $value = ~$value;
         }
-    
+
         return self::encodeUnsignedNumber($value);
     }
 }

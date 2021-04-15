@@ -7,6 +7,8 @@ use Heremaps\FlexiblePolyline\Traits\EncodableTrait;
 
 class FlexiblePolyline
 {
+    use DecodableTrait;
+    use EncodableTrait;
 
     public const FORMAT_VERSION = 1;
     public const DEFAULT_PRECISION = 5;
@@ -26,6 +28,4 @@ class FlexiblePolyline
     public const RESERVED2  = 5;
     public const CUSTOM1    = 6;
     public const CUSTOM2    = 7;
-
-    use DecodableTrait, EncodableTrait;
 }
